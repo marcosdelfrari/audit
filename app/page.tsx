@@ -6,17 +6,26 @@ import Image from "next/image";
 export default function Home() {
   const [codigo, setCodigo] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
   const pesquisar = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!codigo.trim()) {
+    const codigoDigitado = codigo.trim();
+    if (!codigoDigitado) {
       return;
     }
+
+    setPdfUrl(null);
     setLoading(true);
+
+    if (codigoDigitado === "5436090006") {
+      setPdfUrl("/Atestado%20Medico%20com%20CID.pdf");
+      setLoading(false);
+    }
   };
 
   return (
-    <main className="min-h-screen bg-[#ececec]">
+    <main className="min-h-screen bg-[#ececec] lg:flex">
       <section className="min-h-screen max-w-[330px] bg-[#156839] px-2 py-4 text-white">
         <div className="mx-auto w-full rounded border border-white/70 p-2">
           <Image
@@ -86,6 +95,20 @@ export default function Home() {
             </button>
           </div>
         </div>
+      </section>
+
+      <section className="flex flex-1 items-center justify-center p-4">
+        {pdfUrl ? (
+          <iframe
+            src={pdfUrl}
+            title="Documento validado"
+            className="h-[92vh] w-full rounded border border-zinc-300 bg-white"
+          />
+        ) : (
+          <div className="text-sm text-zinc-500">
+            Digite o codigo e clique em Pesquisar.
+          </div>
+        )}
       </section>
     </main>
   );
